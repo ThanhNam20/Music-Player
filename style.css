@@ -35,7 +35,7 @@ body {
 
 .img-container::after {
     content: '';
-    background-color: #000;
+    background-color: #fff;
     border-radius: 50%;
     position: absolute;
     bottom: 100%;
@@ -108,7 +108,7 @@ body {
     padding: 10px 10px 10px 150px;
     opacity: 0;
     transform: translateY(0%);
-    transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+    transition: transform 0.5s ease-in, opacity 0.5s ease-in;
     z-index: 0;
 }
 
