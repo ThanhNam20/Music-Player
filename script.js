@@ -1,101 +1,78 @@
-const musicContainer = document.querySelector('#music-container');
+const musicContainer = document.getElementById('music-container');
 
-const playBtn = document.querySelector("#play");
-const prevBtn = document.querySelector("#prev");
-const nextBtn = document.querySelector("#next");
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
 
-const audio = document.querySelector("#audio");
-const progress = document.querySelector("#progress");
-const progressContainer = document.querySelector("#progress-container");
-const title = document.querySelector("#title");
-const cover = document.querySelector("#cover");
+const audio = document.getElementById("audio");
+const progress = document.getElementById("progress");
+const progressContainer = document.getElementById("progress-container");
+const title = document.getElementById("title");
+const cover = document.getElementById("cover");
 
-//Song titles
-const songs = ['hey', 'summer', 'ukulele'];
-//Keep track of songs
-let songIndex = 1;
-//Initially load song details into DOM 
+var songs = ['summer', 'hey', 'ukulele'];
+var songIndex = 0;
+
 loadSong(songs[songIndex]);
-//Update song details
+
 function loadSong(song) {
     title.innerText = song;
-    audio.src = `music/${song}.mp3`;
-    cover.src = `images/${song}.jpg`
+    cover.src = `./images/${song}.jpg`
+    audio.src = `./music/${song}.mp3`
 }
 
-//PlaySong
-function playSong() {
-    musicContainer.classList.add('play');
-    playBtn.querySelector('i.fas').classList.remove('fa-play');
-    playBtn.querySelector("i.fas").classList.add("fa-pause");
-
-    audio.play();
-}
-//Pause Song
 function pauseSong() {
-    musicContainer.classList.remove("play");
-    playBtn.querySelector("i.fas").classList.add("fa-play");
-    playBtn.querySelector("i.fas").classList.remove("fa-pause");
-
+    musicContainer.classList.remove('play');
+    playBtn.querySelector('i').classList.add('fa-play');
+    playBtn.querySelector("i").classList.remove("fa-pause");
     audio.pause();
 }
+function playSong() {
+    musicContainer.classList.add("play");
+    playBtn.querySelector("i").classList.remove("fa-play");
+    playBtn.querySelector("i").classList.add("fa-pause");
+    audio.play();
+}
 
-//Pre song 
-function prevSong() {
-    songIndex--;
-    if (songIndex < 0) {
-        songIndex = songs.length - 1;
+function nextSong() {
+    songIndex++;
+    if (songIndex > songs.length - 1) {
+        songIndex = 0;
     }
     loadSong(songs[songIndex]);
     playSong();
 }
 
-//Next Song 
-function nextSong() {
-  songIndex++;
+function prevSong() {
+  songIndex--;
   if (songIndex > songs.length - 1) {
-      songIndex = 0;
+    songIndex = 0;
   }
   loadSong(songs[songIndex]);
   playSong();
 }
-// Event Listeners
+
+function timeUpdate(event) {
+    const { currentTime, duration } = event.target;
+    const percent = currentTime / duration * 100;
+    progress.style.width = `${percent}%`;
+}
+
+function updateProgress(event) {
+    const widthX = this.clientWidth;
+    const updateX = event.offsetX;
+    audio.currentTime = updateX / widthX * audio.duration;
+}
+
 playBtn.addEventListener('click', () => {
-    const isPlaying = musicContainer.classList.contains('play');
+    var isPlaying = musicContainer.classList.contains('play');
+    (isPlaying) ? pauseSong() : playSong();
+});
 
-    if (isPlaying) {
-        pauseSong();
-    } else {
-        playSong();
-    }
-})
+nextBtn.addEventListener('click', nextSong);
+prevBtn.addEventListener("click", prevSong);
 
-//Update preogress bar
-function updateProgress(e) {
-    const { duration, currentTime } = e.srcElement;
-    const progressPercent = (currentTime / duration) * 100;
-    progress.style.width = `${progressPercent}%`;
-}
-
-//Set progress Bar
-function setProgress(e) {
-    const width = this.clientWidth;
-    const clickX = e.offsetX
-    const duration = audio.duration;
-
-    audio.currentTime = (clickX/width)*duration
-}
-
-//Change Song
-prevBtn.addEventListener('click', prevSong);
-nextBtn.addEventListener("click", nextSong);
-
-// Time-song update 
-audio.addEventListener('timeupdate', updateProgress);
-
-// Click on progress bar 
-progressContainer.addEventListener('click', setProgress);
-
-//Song ends
+audio.addEventListener('timeupdate', timeUpdate);
+progressContainer.addEventListener('click', updateProgress);
 
 audio.addEventListener('ended', nextSong);
