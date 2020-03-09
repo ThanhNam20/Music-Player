@@ -9,18 +9,41 @@ const progress = document.getElementById("progress");
 const progressContainer = document.getElementById("progress-container");
 const title = document.getElementById("title");
 const cover = document.getElementById("cover");
+const singer = document.getElementById("singerName");
 const cur = document.getElementById('currentTime');
 const dur = document.getElementById("duration");
 
-var songs = ['summer', 'hey', 'ukulele'];
+// var songs = ['summer', 'hey', 'ukulele'];
 var songIndex = 0;
+
+var songs = [
+    {
+        singer:'Unknown',
+        title: 'Summer',
+        name: 'summer',
+        background:'summer'
+    },
+    {
+        singer:'Unknown',
+        title:'Hey',
+        name: 'hey',
+        background:'hey'
+    },
+    {   
+        singer:'Unknown',
+        title:'Ukulele',
+        name: 'ukulele',
+        background:'ukulele'
+    }
+]
 
 loadSong(songs[songIndex]);
 
 function loadSong(song) {
-    title.innerText = song;
-    cover.src = `./images/${song}.jpg`
-    audio.src = `./music/${song}.mp3`
+    title.innerText = song.title;
+    singer.innerText = song.singer;
+    cover.src = `./images/${song.background}.jpg`;
+    audio.src = `./music/${song.name}.mp3`;
 }
 
 function pauseSong() {
@@ -29,6 +52,7 @@ function pauseSong() {
     playBtn.querySelector("i").classList.remove("fa-pause");
     audio.pause();
 }
+
 function playSong() {
     musicContainer.classList.add("play");
     playBtn.querySelector("i").classList.remove("fa-play");
@@ -46,17 +70,20 @@ function nextSong() {
 }
 
 function prevSong() {
-  songIndex--;
-  if (songIndex > songs.length - 1) {
-    songIndex = 0;
-  }
-  loadSong(songs[songIndex]);
-  playSong();
+    songIndex--;
+    if (songIndex > songs.length - 1) {
+        songIndex = 0;
+    }
+    loadSong(songs[songIndex]);
+    playSong();
 }
 
 function timeUpdate(event) {
-    const { currentTime, duration } = event.target;
-    
+    const {
+        currentTime,
+        duration
+    } = event.target;
+
     const percent = currentTime / duration * 100;
     progress.style.width = `${percent}%`;
 
@@ -68,8 +95,8 @@ function secToMinute(data) {
     var minutes = Math.floor(data / 60);
     var seconds = data - minutes * 60;
     return minutes.toString().padStart(2, "0") +
-      ":" +
-      seconds.toString().padStart(2, "0"); 
+        ":" +
+        seconds.toString().padStart(2, "0");
 }
 
 function updateProgress(event) {
@@ -80,7 +107,7 @@ function updateProgress(event) {
 
 playBtn.addEventListener('click', () => {
     var isPlaying = musicContainer.classList.contains('play');
-    (isPlaying) ? pauseSong() : playSong();
+    (isPlaying) ? pauseSong(): playSong();
 });
 
 nextBtn.addEventListener('click', nextSong);
