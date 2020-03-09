@@ -9,6 +9,8 @@ const progress = document.getElementById("progress");
 const progressContainer = document.getElementById("progress-container");
 const title = document.getElementById("title");
 const cover = document.getElementById("cover");
+const cur = document.getElementById('currentTime');
+const dur = document.getElementById("duration");
 
 var songs = ['summer', 'hey', 'ukulele'];
 var songIndex = 0;
@@ -54,8 +56,20 @@ function prevSong() {
 
 function timeUpdate(event) {
     const { currentTime, duration } = event.target;
+    
     const percent = currentTime / duration * 100;
     progress.style.width = `${percent}%`;
+
+    cur.innerHTML = `${secToMinute(Math.floor(currentTime))}/`;
+    dur.innerText = secToMinute(Math.floor(duration));
+}
+
+function secToMinute(data) {
+    var minutes = Math.floor(data / 60);
+    var seconds = data - minutes * 60;
+    return minutes.toString().padStart(2, "0") +
+      ":" +
+      seconds.toString().padStart(2, "0"); 
 }
 
 function updateProgress(event) {

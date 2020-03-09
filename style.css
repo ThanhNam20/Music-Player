@@ -118,6 +118,7 @@ body {
 }
 .progress-container {
     background: #fff;
+    display:flex;
     border-radius: 5px;
     cursor: pointer;
     margin: 10px 0;
@@ -131,5 +132,12 @@ body {
     width: 40%;
     transition: width 0.1 linear;
 } 
+
+.time {
+    display: flex;
+    font-size: 75%;
+    justify-content: flex-end;
+    padding-right: 10px;
+}
 
 
